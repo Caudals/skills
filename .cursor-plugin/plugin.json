@@ -1,0 +1,15 @@
+{
+  "name": "caudals",
+  "displayName": "Caudals",
+  "version": "1.1.0",
+  "description": "Test and monitor AI assistants, chatbots and agents with Caudals from your editor and CI: read runs, reports and schedules, gate releases on a Caudals evaluation, estimate credits and verify signed webhooks.",
+  "author": {
+    "name": "Caudals",
+    "url": "https://caudals.com"
+  },
+  "homepage": "https://caudals.com",
+  "repository": "https://github.com/Caudals/skills",
+  "license": "MIT",
+  "keywords": ["ai-evaluation", "llm-evaluation", "evals", "chatbot-testing", "ai-agents", "release-gate", "ci", "webhooks"],
+  "logo": "assets/logo.svg"
+}

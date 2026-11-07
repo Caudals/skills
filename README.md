@@ -8,6 +8,8 @@ npx skills add caudals/skills
 
 Works with Claude Code, Cursor, Codex, GitHub Copilot, Windsurf, Gemini CLI and the other agents supported by the [skills CLI](https://github.com/vercel-labs/skills).
 
+The repository is also a Cursor plugin (`.cursor-plugin/plugin.json`): the `caudals-evals` skill plus the `caudals-api` rule in [`rules/caudals-api.mdc`](rules/caudals-api.mdc), which keeps tokens, idempotency keys, release gates and webhook checks safe whenever your code calls Caudals.
+
 ## Skills
 
 ### `caudals-evals`
