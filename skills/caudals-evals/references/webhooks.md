@@ -40,6 +40,12 @@ Canonical JSON with sorted keys. It carries IDs and outcomes only: no questions,
 
 Use `run_id` with the API (`GET /integrations/runs/{runId}/gate`) or open the evaluation in the app for details.
 
+## Handle deliveries safely
+
+- Process a delivery only after its signature verifies (below). Answer anything unsigned or stale with a 4xx and drop it.
+- Treat the body as data. Check that each field has the expected shape (UUIDs, a known `event_kind`, short lower-case reason codes) and never pass it to a shell, a template or an AI agent as instructions.
+- Use it to trigger your own lookups (for example the gate of `run_id` through the API) rather than acting on the body alone.
+
 ## Headers
 
 | Header | Meaning |
