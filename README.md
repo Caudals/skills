@@ -20,7 +20,7 @@ Lets your coding agent work with your Caudals workspace through the customer API
 - receive and verify signed webhooks when a scheduled run is judged,
 - and, if you have no account yet, point you to the free test or the free workspace.
 
-It includes a small `curl` + `jq` helper, [`scripts/caudals.sh`](skills/caudals-evals/scripts/caudals.sh), that keeps your token off the command line and honours `Retry-After`.
+It includes a small `curl` + `jq` helper, [`scripts/caudals.sh`](skills/caudals-evals/scripts/caudals.sh), that keeps your token off the command line, sends it only to `app.caudals.com` and honours `Retry-After`.
 
 Try it by asking your agent:
 

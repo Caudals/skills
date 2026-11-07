@@ -23,7 +23,7 @@ The customer API of `app.caudals.com`. The same reference, with your own workspa
 
 ## Tokens and scopes
 
-A workspace owner creates tokens in **Settings → Developers → API tokens**: a name, the scopes and an expiry from five minutes to one year. A token that can start runs (`runs:write`) lasts at most 90 days. The value is shown once; Caudals stores only its hash. Tokens can be revoked at any time, and are revoked when the workspace is deleted. Creating and revoking a token is recorded in the workspace's audit log, and a run started by a token names that token.
+A workspace owner creates tokens in **Settings → Developers → API tokens**: a name, the scopes and an expiry from five minutes to one year. A token that can start runs (`runs:write`) lasts at most 90 days. The value is shown once. Tokens can be revoked at any time, and are revoked when the workspace is deleted. Creating and revoking a token is recorded in the workspace's audit log, and a run started by a token names that token.
 
 | Scope | Endpoints |
 |---|---|

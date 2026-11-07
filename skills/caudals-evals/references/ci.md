@@ -9,7 +9,7 @@ Two ways to stop a release when the AI assistant got worse:
 
 1. In https://app.caudals.com/workspace/settings?tab=developers, under **Release gate**, find the evaluation and copy its **Test set version ID** and **System version ID**. Set a **pass threshold** there (for example 90 %); without one the gate answers `unknown`.
 2. Under **API tokens**, create a token. For option 1 give it `runs:write` and `runs:read` and an expiry of at most 90 days; for option 2 `runs:read` is enough.
-3. Store the token as a CI secret named `CAUDALS_TOKEN`. Store the workspace ID and the two version IDs as plain CI variables; they are not secret.
+3. Store the token as a CI secret named `CAUDALS_TOKEN` (on GitLab, masked and protected, so only protected branches can read it). Store the workspace ID and the two version IDs as plain CI variables; they are not secret. Never run the job on `pull_request_target` or other triggers that hand secrets to code from forks.
 4. Note the token's expiry and rotate it before then.
 
 The `Idempotency-Key` must be the same on every retry of one release and different for each release. Include the commit and the attempt number, as below, so a re-run of the job starts a fresh run while a network retry does not.
@@ -23,6 +23,8 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
+permissions:
+  contents: read
 jobs:
   caudals:
     runs-on: ubuntu-latest
@@ -76,8 +78,8 @@ caudals_gate:
   timeout: 90m
   variables:
     CAUDALS_API: https://app.caudals.com/api/evals/v1
-    # CAUDALS_TOKEN (masked), CAUDALS_ORG_ID, CAUDALS_SUITE_VERSION_ID and
-    # CAUDALS_TARGET_REVISION_ID are set in Settings → CI/CD → Variables.
+    # CAUDALS_TOKEN (masked and protected), CAUDALS_ORG_ID, CAUDALS_SUITE_VERSION_ID
+    # and CAUDALS_TARGET_REVISION_ID are set in Settings → CI/CD → Variables.
   before_script:
     - apk add --no-cache curl jq
   script:

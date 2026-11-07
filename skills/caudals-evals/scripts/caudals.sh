@@ -4,14 +4,28 @@
 # Environment:
 #   CAUDALS_TOKEN   customer API token (evct_...), kept secret
 #   CAUDALS_ORG_ID  workspace ID
-#   CAUDALS_API     optional, default https://app.caudals.com/api/evals/v1
+#   CAUDALS_API     optional, default https://app.caudals.com/api/evals/v1; only that
+#                   address or a local test server (http://127.0.0.1:<port> or
+#                   http://localhost:<port>, path /api/evals/v1) is accepted, so the
+#                   token can never be sent anywhere else
 #
 # Needs bash, curl and jq. The token is passed to curl on standard input, never
-# on the command line, and is never printed.
+# on the command line, and is never printed. ~/.curlrc is ignored, redirects are
+# not followed and only HTTPS is used outside a local test server.
 set -euo pipefail
+umask 077
+
+die() { printf 'caudals: %s\n' "$*" >&2; exit 64; }
 
 API="${CAUDALS_API:-https://app.caudals.com/api/evals/v1}"
 API="${API%/}"
+if [ "$API" = "https://app.caudals.com/api/evals/v1" ]; then
+  PROTO="=https"
+elif [[ "$API" =~ ^http://(127\.0\.0\.1|localhost):[0-9]{1,5}/api/evals/v1$ ]]; then
+  PROTO="=http"
+else
+  die "CAUDALS_API must be https://app.caudals.com/api/evals/v1 (or a local test server); refusing to send the token elsewhere"
+fi
 UUID_RE='^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
 
 usage() {
@@ -37,8 +51,6 @@ Environment: CAUDALS_TOKEN, CAUDALS_ORG_ID, optional CAUDALS_API.
 EOF
 }
 
-die() { printf 'caudals: %s\n' "$*" >&2; exit 64; }
-
 need() {
   command -v curl >/dev/null 2>&1 || die "curl is required"
   command -v jq >/dev/null 2>&1 || die "jq is required"
@@ -57,11 +69,12 @@ trap 'rm -rf "$TMP"' EXIT
 # Sets STATUS and RETRY_AFTER; the body is left in $TMP/body.
 request() {
   local method="$1" path="$2" body="${3:-}" key="${4:-}"
-  local -a args=(-sS -X "$method" -o "$TMP/body" -D "$TMP/headers" -w '%{http_code}'
-    -H 'Accept: application/json' -H 'User-Agent: caudals-evals-skill/1.0')
+  local -a args=(-sS --proto "$PROTO" --max-redirs 0 --connect-timeout 15 --max-time 120
+    -X "$method" -o "$TMP/body" -D "$TMP/headers" -w '%{http_code}'
+    -H 'Accept: application/json' -H 'User-Agent: caudals-evals-skill/1.1')
   if [ -n "$body" ]; then args+=(-H 'Content-Type: application/json' --data-binary "$body"); fi
   if [ -n "$key" ]; then args+=(-H "Idempotency-Key: $key"); fi
-  STATUS="$(printf 'header = "Authorization: Bearer %s"\n' "$CAUDALS_TOKEN" | curl -K - "${args[@]}" "$API$path")" || die "request failed: $method $path"
+  STATUS="$(printf 'header = "Authorization: Bearer %s"\n' "$CAUDALS_TOKEN" | curl -q -K - "${args[@]}" "$API$path")" || die "request failed: $method $path"
   RETRY_AFTER="$(awk 'tolower($1)=="retry-after:" {gsub("\r",""); print $2}' "$TMP/headers" | tail -n 1)"
 }
 
