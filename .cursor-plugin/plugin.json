@@ -1,7 +1,7 @@
 {
   "name": "caudals",
   "displayName": "Caudals",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Test and monitor AI assistants, chatbots and agents with Caudals from your editor and CI: read runs, reports and schedules, gate releases on a Caudals evaluation, estimate credits and verify signed webhooks.",
   "author": {
     "name": "Caudals",
