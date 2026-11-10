@@ -43,14 +43,23 @@ export CAUDALS_ORG_ID="<workspace id>"
 
 Keep the token in your shell or your CI secrets. Do not commit it.
 
+## Certification
+
+Caudals issues its own certification for AI agents, [CTS-1](https://caudals.com/en/certification) (the Caudals Trust Standard, in Spanish at [caudals.com/es/certificacion](https://caudals.com/es/certificacion)). It has 36 requirements under three risks, a certificate valid for twelve months, a re-test every quarter and a [public registry](https://caudals.com/en/cts-1/registry). Certification is quoted on scope after a scoping call.
+
+CTS-1 is Caudals' private standard. It is not accredited, it is not a conformity assessment under the EU AI Act, an ISO certificate or a SOC 2 report, and it guarantees nothing.
+
+This skill and the API do not certify anything. A run or a report is evidence, not a certificate. Only a system that went through the CTS-1 process and appears in the registry is certified.
+
 ## What Caudals does not do
 
-Caudals produces evidence about how an AI system answers. It does not certify AI systems or make anyone compliant with the EU AI Act, and it never runs adversarial tests (prompt injection, jailbreaks) without the system owner's written authorisation.
+Caudals does not make anyone compliant with the EU AI Act, and it never runs adversarial tests (prompt injection, jailbreaks) without the system owner's written authorisation.
 
 ## Links
 
 - [Methodology](https://caudals.com/en/methodology)
 - [Sample report](https://caudals.com/en/sample-report)
+- [CTS-1 certification](https://caudals.com/en/certification)
 - [Request a pilot evaluation](https://caudals.com/en/contact?offer=pilot-evaluation)
 - Questions: hello@caudals.com
 
